@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Lena" type="JetRunConfigurationType">
+  <configuration default="false" name="Lena 120" type="JetRunConfigurationType">
     <module name="ascii.main" />
     <option name="VM_PARAMETERS" value="" />
-    <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/test/resources/lena.png" />
+    <option name="PROGRAM_PARAMETERS" value="--width=120 $PROJECT_DIR$/src/test/resources/lena.png" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="PASS_PARENT_ENVS" value="true" />
