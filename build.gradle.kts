@@ -18,6 +18,8 @@ dependencies {
     implementation("com.github.ajalt:clikt:2.7.1")
     implementation("com.sksamuel.scrimage:scrimage-core:$scrimageVersion")
     implementation("com.sksamuel.scrimage:scrimage-filters:$scrimageVersion")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 }
 
 application {
@@ -31,5 +33,11 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
     }
 }
