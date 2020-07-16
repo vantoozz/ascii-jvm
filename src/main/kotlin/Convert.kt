@@ -33,7 +33,6 @@ internal class Convert : CliktCommand() {
                     require(it > 0) { "Width must be greater than zero" }
                 }
 
-
     private val invert
             by option("-i", "--invert", help = "Invert colors")
                 .flag(default = false)
