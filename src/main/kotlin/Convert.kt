@@ -3,11 +3,13 @@ package com.github.ascii
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.validate
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.path
 import com.sksamuel.scrimage.ImmutableImage
+import com.sksamuel.scrimage.filter.InvertFilter
 import com.sksamuel.scrimage.filter.ThresholdFilter
 import kotlin.math.round
 
@@ -31,12 +33,19 @@ internal class Convert : CliktCommand() {
                     require(it > 0) { "Width must be greater than zero" }
                 }
 
+
+    private val invert
+            by option("-i", "--invert", help = "Invert colors")
+                .flag(default = false)
+
     override fun run() {
         ImmutableImage.loader()
             .fromPath(imagePath)
             .filter(ThresholdFilter())
             .let {
-                it.scaleTo(it.width, round(it.height * .45).toInt())
+                it
+                    .invertIf(invert)
+                    .scaleTo(it.width, round(it.height * .45).toInt())
                     .scaleToWidth(width)
             }
             .apply {
@@ -50,3 +59,5 @@ internal class Convert : CliktCommand() {
             }
     }
 }
+
+private fun ImmutableImage.invertIf(invert: Boolean) = if (invert) filter(InvertFilter()) else this
