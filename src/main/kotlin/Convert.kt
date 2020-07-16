@@ -11,6 +11,7 @@ import com.github.ajalt.clikt.parameters.types.path
 import com.sksamuel.scrimage.ImmutableImage
 import com.sksamuel.scrimage.filter.InvertFilter
 import com.sksamuel.scrimage.filter.ThresholdFilter
+import com.sksamuel.scrimage.pixels.Pixel
 import kotlin.math.round
 
 private val chars = listOf(
@@ -44,19 +45,20 @@ internal class Convert : CliktCommand() {
             .let {
                 it
                     .invertIf(invert)
-                    .scaleTo(it.width, round(it.height * .45).toInt())
-                    .scaleToWidth(width)
+                    .scaleTo(width, round(it.height / it.width * width * .45).toInt())
             }
             .apply {
                 pixels().toList().zipWithNext().forEach {
-                    print(chars[round(it.first.average().toDouble() * (chars.size - 1) / 255).toInt()])
+                    print(it.first.toChar())
                     if (it.first.y != it.second.y) {
                         println()
                     }
                 }
-                println()
+                println(pixels().last().toChar())
             }
     }
 }
 
 private fun ImmutableImage.invertIf(invert: Boolean) = if (invert) filter(InvertFilter()) else this
+
+private fun Pixel.toChar() = chars[round(average().toDouble() * (chars.size - 1) / 255).toInt()]
