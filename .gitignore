@@ -2,4 +2,4 @@
 build/
 gradle-local.properties
 .gradletasknamecache
-.DS_Store
+**/.DS_Store
