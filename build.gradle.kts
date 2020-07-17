@@ -11,6 +11,7 @@ repositories {
 }
 
 val scrimageVersion = "4.0.5"
+val junitVersion = "5.6.2"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))

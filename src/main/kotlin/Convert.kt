@@ -12,6 +12,7 @@ import com.sksamuel.scrimage.ImmutableImage
 import com.sksamuel.scrimage.filter.InvertFilter
 import com.sksamuel.scrimage.filter.ThresholdFilter
 import com.sksamuel.scrimage.pixels.Pixel
+import java.io.OutputStream
 import kotlin.math.round
 
 private val chars = listOf(
@@ -22,7 +23,7 @@ private val chars = listOf(
     '#', 'M', 'W', '&', '8', '%', 'B', '@', '$'
 )
 
-internal class Convert : CliktCommand() {
+internal class Convert(private val output: OutputStream) : CliktCommand() {
 
     private val imagePath
             by argument(help = "Image Path")
@@ -49,16 +50,18 @@ internal class Convert : CliktCommand() {
             }
             .apply {
                 pixels().toList().zipWithNext().forEach {
-                    print(it.first.toChar())
+                    output.write(it.first.toChar())
                     if (it.first.y != it.second.y) {
-                        println()
+                       output.write(System.lineSeparator().toByteArray())
                     }
                 }
-                println(pixels().last().toChar())
+
+                output.write(pixels().last().toChar())
+                output.write(System.lineSeparator().toByteArray())
             }
     }
 }
 
 private fun ImmutableImage.invertIf(invert: Boolean) = if (invert) filter(InvertFilter()) else this
 
-private fun Pixel.toChar() = chars[round(average().toDouble() * (chars.size - 1) / 255).toInt()]
+private fun Pixel.toChar() = chars[round(average().toDouble() * (chars.size - 1) / 255).toInt()].toInt()
