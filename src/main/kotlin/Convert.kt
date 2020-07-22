@@ -15,14 +15,6 @@ import com.sksamuel.scrimage.pixels.Pixel
 import java.io.OutputStream
 import kotlin.math.round
 
-private val chars = listOf(
-    '.', '\'', '`', '^', '"', ',', ':', ';', 'I', 'l', '!', 'i', '>', '<', '~',
-    '+', '_', '-', '?', ']', '[', '}', '{', '1', ')', '(', '|', '\\', '/', 't',
-    'f', 'j', 'r', 'x', 'n', 'u', 'v', 'c', 'z', 'X', 'Y', 'U', 'J', 'C', 'L',
-    'Q', '0', 'O', 'Z', 'm', 'w', 'q', 'p', 'd', 'b', 'k', 'h', 'a', 'o', '*',
-    '#', 'M', 'W', '&', '8', '%', 'B', '@', '$'
-)
-
 internal class Convert(private val output: OutputStream) : CliktCommand() {
 
     private val imagePath
@@ -52,7 +44,7 @@ internal class Convert(private val output: OutputStream) : CliktCommand() {
                 pixels().toList().zipWithNext().forEach {
                     output.write(it.first.toChar())
                     if (it.first.y != it.second.y) {
-                       output.write(System.lineSeparator().toByteArray())
+                        output.write(System.lineSeparator().toByteArray())
                     }
                 }
 
@@ -65,3 +57,11 @@ internal class Convert(private val output: OutputStream) : CliktCommand() {
 private fun ImmutableImage.invertIf(invert: Boolean) = if (invert) filter(InvertFilter()) else this
 
 private fun Pixel.toChar() = chars[round(average().toDouble() * (chars.size - 1) / 255).toInt()].toInt()
+
+private val chars = listOf(
+    '.', '\'', '`', '^', '"', ',', ':', ';', 'I', 'l', '!', 'i', '>', '<', '~',
+    '+', '_', '-', '?', ']', '[', '}', '{', '1', ')', '(', '|', '\\', '/', 't',
+    'f', 'j', 'r', 'x', 'n', 'u', 'v', 'c', 'z', 'X', 'Y', 'U', 'J', 'C', 'L',
+    'Q', '0', 'O', 'Z', 'm', 'w', 'q', 'p', 'd', 'b', 'k', 'h', 'a', 'o', '*',
+    '#', 'M', 'W', '&', '8', '%', 'B', '@', '$'
+)
