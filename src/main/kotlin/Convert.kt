@@ -6,6 +6,7 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.validate
+import com.github.ajalt.clikt.parameters.types.float
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.path
 import com.sksamuel.scrimage.ImmutableImage
@@ -27,6 +28,12 @@ internal class Convert(private val output: OutputStream) : CliktCommand() {
                     require(it > 0) { "Width must be greater than zero" }
                 }
 
+    private val ratio
+            by option("-r", "--ratio", help = "Width/height ratio")
+                .float().default(.45f).validate {
+                    require(it > 0) { "Ratio must be greater than zero" }
+                }
+
     private val invert
             by option("-i", "--invert", help = "Invert colors")
                 .flag(default = false)
@@ -38,7 +45,7 @@ internal class Convert(private val output: OutputStream) : CliktCommand() {
             .let {
                 it
                     .invertIf(invert)
-                    .scaleTo(width, round(it.height / it.width * width * .45).toInt())
+                    .scaleTo(width, round((it.height * ratio * width) / it.width).toInt())
             }
             .apply {
                 pixels().toList().zipWithNext().forEach {
